@@ -1,6 +1,5 @@
 #include "sort.h"
-void qs_part(int *array, size_t size, size_t left, size_t right);
-void swap(int *array, size_t size, int *a, int *b);
+
 /**
  * quick_sort - sorts an array in ascending order
  * @array: array to sort
@@ -8,55 +7,75 @@ void swap(int *array, size_t size, int *a, int *b);
  */
 void quick_sort(int *array, size_t size)
 {
-	if (array && size > 1)
-		qs_part(array, size, 0, size - 1);
+	if (!array || size < 2)
+		return;
+	qs_part(array, 0, size - 1, size);
 }
 /**
  * qs_part - sorts partition according to pivot
  * @array: original array
+ * @first: first element of array
+ * @last: last element of array
  * @size: size of original array
- * @left: leftmost element of partition
- * @right: rightmost element of partition
  */
-void qs_part(int *array, size_t size, size_t left, size_t right)
+void qs_part(int *array, ssize_t first, ssize_t last, int size)
 {
-	int pivot = array[right];
-	size_t i, j;
+	ssize_t position = 0;
 
-	if (left < right)
+
+	if (first < last)
 	{
-		for (i = j = left; j < right; j++)
-		{
-			if (array[j] <= pivot)
-			{
-				swap(array, size, &array[j], &array[i]);
-				i++;
-			}
-		}
-		swap(array, size, &array[j], &array[i]);
+		position = lomuto_partition(array, first, last, size);
 
-		if (i > 0)
-			qs_part(array, size, left, i - 1);
-
-		qs_part(array, size, i + 1, right);
+		qs(array, first, position - 1, size);
+		qs(array, position + 1, last, size);
 	}
 }
+
 /**
  * swap - swap value of array elements
  * @array: array (for print)
  * @size: size of array (for print)
- * @a: pointer to array element
- * @b: pointer to array element
+ * @obj: object in array element
  */
-void swap(int *array, size_t size, int *a, int *b)
+void swap(int *array, ssize_t size, ssize_t obj)
 {
 	int tmp;
 
-	if (*a != *b)
+	tmp = array[size];
+	array[size] = array[obj];
+	array[obj] = tmp;
+}
+
+/**
+ *lomuto_part - lomuto partition sorting scheme implementation
+ *@array: array
+ *@first: first array element
+ *@last: last array element
+ *@size: size array
+ *Return: return the position of the last element sorted
+ */
+int lomuto_part(int *array, ssize_t first, ssize_t last, size_t size)
+{
+	int pivot = array[last];
+	ssize_t current = first, finder;
+
+	for (finder = first; finder < last; finder++)
 	{
-		tmp = *a;
-		*a = *b;
-		*b = tmp;
-		print_array(arr, size);
+		if (array[finder] < pivot)
+		{
+			if (array[current] != array[finder])
+			{
+				swap(array, current, finder);
+				print_array(array, size);
+			}
+			current++;
+		}
 	}
+	if (array[current] != array[last])
+	{
+		swap(array, current, last);
+		print_array(array, size);
+	}
+	return (current);
 }
