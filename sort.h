@@ -31,9 +31,6 @@ void heap_sort(int *array, size_t size);
 void radix_sort(int *array, size_t size);
 void bitonic_sort(int *array, size_t size);
 void quick_sort_hoare(int *array, size_t size);
-int lomuto_part(int *array, ssize_t first, ssize_t last, size_t size);
-void qs_part(int *array, ssize_t first, ssize_t last, int size);
-void swap(int *array, ssize_t size, ssize_t obj);
 
 /* Print functions*/
 void print_array(const int *array, size_t size);
